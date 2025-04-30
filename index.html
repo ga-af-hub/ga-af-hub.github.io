@@ -417,16 +417,31 @@
   const menu = document.getElementById('customContextMenu');
 
   document.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    menu.style.display = 'block';
-    menu.style.left = `${e.pageX}px`;
-    menu.style.top = `${e.pageY}px`;
-  });
+  const menuWidth = menu.offsetWidth;
+  const menuHeight = menu.offsetHeight;
+  const pageWidth = window.innerWidth;
+  const pageHeight = window.innerHeight;
 
-  document.addEventListener('click', () => {
-    menu.style.display = 'none';
-  });
+  let x = e.pageX;
+  let y = e.pageY;
+
+  // Adjust X if going off right edge
+  if (x + menuWidth > pageWidth) {
+    x = pageWidth - menuWidth - 10;
+  }
+
+  // Adjust Y if going off bottom edge
+  if (y + menuHeight > pageHeight) {
+    y = pageHeight - menuHeight - 10;
+  }
+
+  // Apply final position
+  menu.style.left = `${x}px`;
+  menu.style.top = `${y}px`;
+  menu.style.display = 'block';
+});
 
   menu.addEventListener('click', async function (e) {
     if (e.target.classList.contains('item')) {
