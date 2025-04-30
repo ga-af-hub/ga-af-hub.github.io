@@ -383,5 +383,76 @@
   });
 </script>
 
+<style>
+  #customContextMenu {
+    position: absolute;
+    display: none;
+    z-index: 10000;
+    background: rgba(98, 0, 179, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    padding: 0.8px;
+    min-width: 160px;
+    font-family: sans-serif;
+  }
+
+  #customContextMenu .item {
+    padding: 6px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  #customContextMenu .item:hover {
+    background: rgba(0,0,0,0.3);
+  }
+</style>
+
+<div id="customContextMenu">
+  <div class="item" data-action="back">Back</div>
+  <div class="item" data-action="reload">Reload</div>
+  <div class="item" data-action="copyUrl">Share</div>
+</div>
+
+<script>
+  const menu = document.getElementById('customContextMenu');
+
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+
+    menu.style.display = 'block';
+    menu.style.left = `${e.pageX}px`;
+    menu.style.top = `${e.pageY}px`;
+  });
+
+  document.addEventListener('click', () => {
+    menu.style.display = 'none';
+  });
+
+  menu.addEventListener('click', async function (e) {
+    if (e.target.classList.contains('item')) {
+      const action = e.target.dataset.action;
+
+      switch (action) {
+        case 'back':
+          history.back();
+          break;
+        case 'reload':
+          location.reload();
+          break;
+        case 'copyUrl':
+          try {
+            await navigator.clipboard.writeText(location.href);
+            alert("The page URL has been copied to your clipboard.");
+          } catch (err) {
+            alert("Failed to copy URL: " + err);
+          }
+          break;
+      }
+
+      menu.style.display = 'none';
+    }
+  });
+</script>
+  
 </body>
 </html>
