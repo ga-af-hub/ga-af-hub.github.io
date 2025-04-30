@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="https://ga-af-hub.github.io/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Fusion Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Russo One', sans-serif;
+      background: linear-gradient(to top, #000000, #8b00ff, #ff0077);
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 210px;
+      background: #390F9A;
+      padding: 20px;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar img {
+      width: 50px;
+      height: 50px;
+      display: block;
+      border-radius: 5px;
+      margin: 25px auto;
+    }
+
+    .sidebar h1 {
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 35px;
+      line-height: 1.2;
+      color: white;
+    }
+
+    .sidebar a,
+    .sidebar summary {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 4px 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .sidebar a:hover,
+    summary:hover {
+      opacity: 0.75;
+    }
+
+    .outer-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .main {
+      flex: 1;
+      padding: 20px;
+      max-width: 1100px;
+      margin: auto;
+      color: #111;
+    }
+
+    .header {
+      text-align: center;
+      padding: 40px 20px;
+      background: url('https://ga-af-hub.github.io/games/BG.svg') center/cover no-repeat;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .header h2 {
+      font-size: 42px;
+      margin: 0 0 10px 0;
+    }
+
+    .header p {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .welcome-bar {
+      background-color: rgb(106, 59, 217);
+      text-align: center;
+      padding: 10px;
+      font-size: 20px;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .news {
+      margin-top: 20px;
+      background: rgba(62, 21, 158, 0.6);
+      padding-top: 1px;
+      padding-bottom: 25px;
+      border-radius: 10px;
+    }
+
+    .news h2 {
+      text-align: center;
+      font-size: 43px;
+      margin-bottom: 15px;
+      margin-top: 14px;
+      font-weight: normal;
+    }
+
+    .news h3 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .news-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: url('https://ga-af-hub.github.io/games/BG.svg') center/cover no-repeat;
+    }
+
+    .news-content img {
+      width: 300px;
+      max-width: 100%;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 35px #fff;
+    }
+
+    .news-text {
+      max-width: 700px;
+      text-align: center;
+      margin: 10px;
+    }
+
+    .news-text p {
+      font-size: 20px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 20px;
+      color: white;
+    }
+
+    details {
+        overflow: hidden;
+        transition: height 0.3s ease;
+        border-radius: 5px;
+    }
+
+    summary {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 8px 0;
+        user-select: none;
+        font-weight: normal;
+    }
+
+    summary .arrow {
+        display: inline-block;
+        margin-right: 10px;
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    summary:has(+ .details-content) .arrow {
+        transform: rotate(0deg);
+        transition: transform 0.3s ease;
+    }
+
+    details[open] > summary:has(+ .details-content) .arrow {
+        transform: rotate(90deg);
+    }
+
+    .arrow {
+      transition: transform 0.3s ease;
+    }
+    .arrow.open {
+      transform: rotate(90deg);
+    }
+
+    /* Hide nested links initially */
+    details .details-content {
+        overflow: hidden;
+        height: 0;
+        transition: height 0.3s ease;
+        display: block;
+        transform: translateX(30px);
+    }
+
+    .toggle-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: white;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: fixed;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transform: translateX(-100%);
+        z-index: 1000;
+        box-shadow: 5px 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .outer-main {
+        margin-left: 0;
+      }
+
+      .toggle-btn {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="container">
+  <div class="sidebar" id="sidebar">
+    <img src="https://ga-af-hub.github.io/games/Logo.png" alt="Game Fusion Hub Logo">
+    <h1>Game<br>Fusion Hub</h1>
+    <a href="#">Lounge</a>
+    <a href="#">Account Manager</a>
+    <details>
+      <summary><span class="arrow">▶</span> Area #1</summary>
+      <div class="details-content">
+      <a href="#">Super Mario World</a>
+      <a href="#">Donkey Kong Country</a>
+      <a href="#">Legend of Zelda - A Link to the Past</a>
+      <a href="#">Super Mario All-Stars</a>
+      <a href="#">Ultimate Mortal Kombat 3</a>
+      <a href="#">Super Mario Kart</a>
+      <a href="#">Shin Kidousenki Gundam Wing - Endless Duel</a>
+      <a href="#">Super Metroid</a>
+      <a href="#">Kirby Super Star</a>
+      <a href="#">Super Mario RPG - Legend of the Seven Stars</a>
+      </div>
+    </details>
+    <details>
+      <summary><span class="arrow">▶</span> Area #2</summary>
+      <div class="details-content">
+      <a href="#">Super Mario 64</a>
+      <a href="#">Donkey Kong 64</a>
+      <a href="#">Legend of Zelda - Ocarina of Time</a>
+      <a href="#">Mario Kart 64</a>
+      <details>
+      <summary><span class="arrow">▶</span> Mario Party</summary>
+      <div class="details-content">
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+      </div>
+      </details>
+      <a href="#">Mega Man 64</a>
+      <a href="#">Paper Mario</a>
+      <a href="#">Pokemon Stadium</a>
+      <a href="#">Super Smash Bros</a>
+      <a href="#">Tom and Jerry in Fists of Furry</a>
+      </div>
+    </details>
+    <a href="#">Meet The Creators</a>
+  </div>
+
+  <div class="outer-main">
+    <div class="main">
+      <div class="header">
+        <h2>Game Fusion Hub</h2>
+        <p>Home to The Creator (G.A) and The Co-Producer (A.F.)</p>
+      </div>
+
+      <div class="welcome-bar">
+        Welcome to Game Fusion Hub! You are currently in the Lounge. We hope you enjoy Game Fusion Hub! Have fun!
+      </div>
+
+      <div class="news">
+        <h2>News:</h2>
+        <div class="news-content">
+          <img src="https://ga-af-hub.github.io/games/Logo.png" alt="G.A. A.F. Logo">
+          <div class="news-text">
+            <h3>Game Fusion Hub Official Site Release!</h3>
+            <p>We are proud to announce that the site's official release has been made on April 20th of 2024. 
+            We hope you all enjoy what there is to come in the future and be sure to stay tuned for more, 
+            new, and exciting features!</p>
+            <p>-G.A. &nbsp;&nbsp; -A.F.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Created by Gabe Arreguin (G.A) and Co-Produced by Alexander Fay (A.F.)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('open');
+  }
+</script>
+
+<script>
+  document.querySelectorAll('details').forEach(detail => {
+    const summary = detail.querySelector('summary');
+    const content = detail.querySelector('.details-content');
+    const arrow = summary.querySelector('.arrow');
+
+    let isClosing = false;
+
+    if (detail.hasAttribute('open')) {
+      content.style.height = content.scrollHeight + "px";
+      arrow.classList.add('open');
+    }
+
+    summary.addEventListener('click', e => {
+      e.preventDefault();
+      const isOpen = detail.hasAttribute('open');
+
+      if (isOpen && !isClosing) {
+        isClosing = true;
+        content.style.height = content.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          content.style.height = '0px';
+        });
+
+        arrow.classList.remove('open'); // rotate arrow with animation
+
+        content.addEventListener('transitionend', function handler() {
+          detail.removeAttribute('open');
+          isClosing = false;
+          content.removeEventListener('transitionend', handler);
+        });
+      } else if (!isOpen) {
+        detail.setAttribute('open', '');
+        content.style.height = '0px';
+        arrow.classList.add('open'); // rotate arrow immediately
+
+        requestAnimationFrame(() => {
+          content.style.height = content.scrollHeight + 'px';
+        });
+      }
+    });
+
+    content.addEventListener('transitionend', () => {
+      if (detail.hasAttribute('open') && !isClosing) {
+        content.style.height = 'auto';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
