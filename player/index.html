@@ -6,6 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-adsense-account" content="ca-pub-6086576573211666">
   <title>Game Fusion Hub</title>
+  <script>
+    // Disable scrolling via arrow keys and space bar
+    window.addEventListener("keydown", function(e) {
+      const keysToBlock = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+      if (keysToBlock.includes(e.key)) {
+        e.preventDefault();
+      }
+    }, { passive: false }); // passive: false is required to call preventDefault()
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <style>
     body {
