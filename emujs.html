@@ -1,6 +1,15 @@
 
 <link rel="icon" href="https://i.ibb.co/kyKqysZ/emujs.png">
 <title>EmulatorJS - Game Fusion Hub</title>
+<script>
+    // Disable scrolling via arrow keys and space bar
+    window.addEventListener("keydown", function(e) {
+      const keysToBlock = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+      if (keysToBlock.includes(e.key)) {
+        e.preventDefault();
+      }
+    }, { passive: false }); // passive: false is required to call preventDefault()
+  </script>
 <div style="position:absolute;top:0;left:0;height:100%;width:100%;">
         <div id="game"></div>
       </div>
