@@ -456,6 +456,17 @@ document.addEventListener('click', () => {
     }
   });
 </script>
+
+<script>
+    // Optional: Prevent input focus from causing scroll jumps
+    const input = document.querySelector('iframe');
+    input.addEventListener('focus', () => {
+      setTimeout(() => {
+        // This prevents some mobile browsers (like iOS Safari) from jumping the page
+        window.scrollTo(0, window.scrollY);
+      }, 50);
+    });
+  </script>
   
 </body>
 </html>
